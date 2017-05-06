@@ -51,7 +51,27 @@ public class SaleControlTest {
 		assertEquals(expectedTotal, 179.98, 0.00001);
 		
 	}
+	@Test
+	public void ifNoItemsEnteredNoReceiptIsGenerated(){
+		sale.startSale("1");
+		assertEquals(0,sale.countOfCopiesEntered());
+		assertEquals("No Copies entered yet", sale.receipt());
+	}
 	
+	@Test
+	public void receiptShowsIsProvidedWithTranasactionTypeAndCopiesEntered(){
+		
+		sale.startSale("1");
+		
+		sale.addCopyForSale("C003");
+		sale.receipt();
+		String receipt ="\nTransaction Type: Sale\nCopies\tUnit Price\nC003\t149.99\nTotal Price:149.99";
+		assertEquals(true, sale.receipt().endsWith(receipt));
+		sale.completeSale();
+		
+		
+
+	}
 	@Test (expected = SaleControl.CopyNotForSale.class )
 	public void tryingToSaleTitlesNotForSaleRaisesCopyNotForSaleError() {
 		sale.addCopyForSale("C399");

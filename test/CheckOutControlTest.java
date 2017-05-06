@@ -23,6 +23,7 @@ public class CheckOutControlTest {
 		
 		copy = new Copy("C001", new Title("T001", "The key to success", 9.99));
 		patron = new Patron("olani", "1");
+		
 	}
 
 
@@ -34,12 +35,14 @@ public class CheckOutControlTest {
 		checkOutControl.addForCheckOut("C002");
 
 		assertEquals(2, checkOutControl.countOfCopiesEntered());
+		checkOutControl.completeCheckOut();
 	}
 	
 
 	@Test (expected = Domain.UnknownCopy.class )
 	public void tryingToAddUknownCopiesForCheckoutRaisesUknownCopyError() {
 		checkOutControl.addForCheckOut("C0011");
+		checkOutControl.completeCheckOut();
 	}
 	
 	@Test(expected = Domain.UnknownPatron.class)
@@ -65,9 +68,56 @@ public class CheckOutControlTest {
 
 	}
 	
+	@Test
+	public void copiesCanBeRemovedFromItemsEnteredDuringTransaction(){
+		Copy c3 = CopyDataStore.fetchCopy("C003");
+		Copy c4 = CopyDataStore.fetchCopy("C004");
+		
+		checkOutControl.startCheckOut("1");
+		checkOutControl.addForCheckOut("C003");
+		
+		checkOutControl.addForCheckOut("C004");
+		checkOutControl.removeFromCopiesEntered(c3);
+
+		checkOutControl.completeCheckOut();
+		
+		
+		assertEquals(null, c3.getOutTo());
+		assertEquals("1", c4.getOutTo().getPatronId());
+		assertEquals(1, checkOutControl.countOfCopiesEntered());
+
+	}
+	
+	@Test
+	public void ifNoItemsEnteredNoReceiptIsGenerated(){
+		checkOutControl.startCheckOut("1");
+		assertEquals(0,checkOutControl.countOfCopiesEntered());
+		assertEquals("No Copies entered yet", checkOutControl.receipt());
+	}
+	
+	@Test
+	public void receiptShowsIsProvidedWithTranasactionTypeAndCopiesEntered(){
+		
+		checkOutControl.startCheckOut("1");
+		
+		checkOutControl.addForCheckOut("C003");
+		checkOutControl.receipt();
+		String receipt ="\nTransaction Type: CheckOut\nCopies entered\nC003\n";
+
+		assertEquals(true, checkOutControl.receipt().endsWith(receipt));
+		checkOutControl.completeCheckOut();
+		
+		
+
+	}
+	
 	@After
 	public void clearTransactionLog(){
 		TransactionLogs.cleanLogs();
+		CopyDataStore.fetchCopy("C001").setOutTo(null);
+		CopyDataStore.fetchCopy("C002").setOutTo(null);
+		CopyDataStore.fetchCopy("C003").setOutTo(null);
+		CopyDataStore.fetchCopy("C004").setOutTo(null);
 	}
 	
 

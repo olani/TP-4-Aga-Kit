@@ -7,7 +7,10 @@ import Domain.HoldType;
 import Domain.HoldTypeDataStore;
 
 public class HoldTypeDataStoreTest {
-
+	@Test
+	public void testCreatingHoldTypeDataStoreTest(){
+		HoldTypeDataStore hds = new HoldTypeDataStore();
+	}
 	@Test
 	public void afterAddingHoldTypeToHoldTypeStore_HoldTypeShouldBeInStore() {
 		HoldType ht = new HoldType("Over Due","Cused by late returns");

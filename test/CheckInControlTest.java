@@ -10,6 +10,7 @@ import Domain.Copy;
 import Domain.CopyDataStore;
 import Domain.PatronDataStore;
 import Domain.TransactionLogs;
+import Domain.CheckInControl.CopyHasNotBeedCheckedOut;
 
 public class CheckInControlTest {
 
@@ -35,7 +36,11 @@ public class CheckInControlTest {
 	public void tryingToAddUknownCopiesForCheckInRaisesUknownCopyError() {
 		checkInControl.addForCheckIn("C0011");
 	}
-	
+	@Test
+	public void checkInControlCopyKnowsCurrentPatron(){
+		checkInControl.startCheckIn("2");
+		assertEquals("2", checkInControl.getCurrentPatron().getPatronId());
+	}
 	@Test
 	public void afterCheckInIsCompleted_OutToInformationForCopiesAreUpdated(){
 
@@ -68,6 +73,22 @@ public class CheckInControlTest {
 
 		assertEquals(1, checkInControl.countOfCopiesEntered());
 
+	}
+	@Test
+	public void checkInCanClearAllCopiesEntered(){
+		checkOutControl.startCheckOut("1");
+		checkOutControl.addForCheckOut("C001");
+		checkOutControl.completeCheckOut();
+		checkInControl.startCheckIn("1");
+		checkInControl.addForCheckIn("C001");
+		assertEquals(1, checkOutControl.countOfCopiesEntered());
+		checkInControl.clearCopiesEntered();
+		assertEquals(0, checkInControl.countOfCopiesEntered());
+	}
+	@Test(expected=CopyHasNotBeedCheckedOut.class)
+	public void canNotCheckInCopyIfItWasNotCheckedOut(){
+		checkInControl.startCheckIn("1");
+		checkInControl.addForCheckIn("C001");
 	}
 	
 	@Test

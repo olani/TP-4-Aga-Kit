@@ -41,4 +41,11 @@ public class PatronDataStoreTest{
 		patronStore.fetchPatron("03123");
 	}
 
+	@Test
+	public void testListOfPatrons(){
+		String expectedResult = "Patron ID: 1\tHas hold: false\n"
+				+ "Patron ID: 2\tHas hold: false\n"
+				+ "Patron ID: 399\tHas hold: true\n";
+		assertEquals(expectedResult, patronStore.patronIds());
+	}
 }

@@ -26,7 +26,11 @@ public class CheckOutControlTest {
 		
 	}
 
-
+	@Test
+	public void checkOutCopyKnowsCurrentPatron(){
+		checkOutControl.startCheckOut("2");
+		assertEquals("2", checkOutControl.getCurrentPatron().getPatronId());
+	}
 	
 	@Test
 	public void afterAddingCopy_TheCopyShoulBeInEnteredCopiesList() {
@@ -51,6 +55,32 @@ public class CheckOutControlTest {
 
 	}
 	
+	@Test(expected =Domain.AccountHasHold.class)
+	public void accountHasHoldTest(){
+		checkOutControl.startCheckOut("399");
+	}
+	
+	@Test(expected = Domain.CopyAlreadyCheckedOut.class)
+	public void patronCanNotCheckOutCopyThatIsAlreadyOut(){
+		checkOutControl.startCheckOut("1");
+		checkOutControl.addForCheckOut("C001");
+		checkOutControl.completeCheckOut();
+		
+		checkOutControl.startCheckOut("1");
+		checkOutControl.addForCheckOut("C001");
+		
+	}
+	@Test
+	public void youCanNotEnterCopiesMoreThanOnce(){
+		checkOutControl.startCheckOut("1");
+		checkOutControl.addForCheckOut("C001");
+		assertEquals(1, checkOutControl.countOfCopiesEntered());
+		checkOutControl.addForCheckOut("C001");
+		assertEquals(1, checkOutControl.countOfCopiesEntered());
+		checkOutControl.addForCheckOut("C002");
+		assertEquals(2, checkOutControl.countOfCopiesEntered());
+		checkOutControl.completeCheckOut();
+	}
 	@Test
 	public void afterCheckOutIsCompleted_OutToInformationForCopiesAreUpdated(){
 		checkOutControl.startCheckOut("1");
@@ -87,7 +117,15 @@ public class CheckOutControlTest {
 		assertEquals(1, checkOutControl.countOfCopiesEntered());
 
 	}
-	
+	@Test
+	public void checkOutCanClearAllCopiesEntered(){
+		checkOutControl.startCheckOut("1");
+		checkOutControl.addForCheckOut("C001");
+		checkOutControl.addForCheckOut("C002");
+		assertEquals(2, checkOutControl.countOfCopiesEntered());
+		checkOutControl.clearCopiesEntered();
+		assertEquals(0, checkOutControl.countOfCopiesEntered());
+	}
 	@Test
 	public void ifNoItemsEnteredNoReceiptIsGenerated(){
 		checkOutControl.startCheckOut("1");
@@ -107,8 +145,6 @@ public class CheckOutControlTest {
 		assertEquals(true, checkOutControl.receipt().endsWith(receipt));
 		checkOutControl.completeCheckOut();
 		
-		
-
 	}
 	
 	@After

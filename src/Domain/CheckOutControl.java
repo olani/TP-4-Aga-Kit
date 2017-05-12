@@ -32,14 +32,14 @@ public class CheckOutControl {
 	public void addForCheckOut(String copyId){
 			Copy copy = CopyDataStore.fetchCopy(copyId);
 			if(copy.getOutTo()==null){
-				if(isCopyEnteredForCurrentSale(copy)==false)
+				if(isCopyEnteredForCurrentCheckOut(copy)==false)
 					copiesEntered.add(copy);
 			}
 			else
 				throw new CopyAlreadyCheckedOut();
 	}
 	
-	public boolean isCopyEnteredForCurrentSale(Copy c){
+	public boolean isCopyEnteredForCurrentCheckOut(Copy c){
 		return copiesEntered.contains(c);
 	}
 

@@ -7,7 +7,6 @@ public class Copy
 	private Patron outTo;
 	private Title  copyTitle;
 
-	// following generated in Eclipse Source menu
 
 	public Patron getOutTo()
 	{

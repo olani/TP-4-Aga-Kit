@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,9 +23,8 @@ public class HoldTest {
 	public void aHoldisCreatedOnlyIfaValidHoldTypeIsInHoldTypeDataStore() {
 		hold = new Hold("Past Due Date");
 		assertEquals("Past Due Date", hold.getHoldTypeName());
-		//System.out.println(hold.getHoldEffectiveDate().toString());
 	}
-	
+
 	@Test(expected = Hold.InvalidHoldType.class)
 	public void aHoldCanNotBeCreatedWithoutProperHoldTypeFromHoldTypeDataStore() throws Exception{
 		hold = new Hold("Pastedasdf Due Date");

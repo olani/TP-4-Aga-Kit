@@ -14,13 +14,10 @@ import Domain.PatronDataStore;
 import Domain.TransactionLogs;
 
 public class CheckOutAppTest {
-	private Patron validPatron;
-	private Patron patronWithHold;
 	
 	@Before
 	public void setUp() throws Exception {
-		validPatron=PatronDataStore.fetchPatron("1");
-		patronWithHold = PatronDataStore.fetchPatron("399");
+
 	}
 
 	@After

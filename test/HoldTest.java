@@ -30,5 +30,10 @@ public class HoldTest {
 		hold = new Hold("Pastedasdf Due Date");
 		assertEquals("Past Due Date", hold.getHoldTypeName());
 	}
+	@Test
+	public void testGetHoldEffectiveDate(){
+		hold = new Hold("Past Due Date");
+		hold.getHoldEffectiveDate();
+	}
 
 }

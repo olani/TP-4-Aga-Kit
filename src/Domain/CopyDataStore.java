@@ -27,7 +27,7 @@ public class CopyDataStore {
 		
 	}
 	
-	public void addCopy(Copy c) {
+	public static void addCopy(Copy c) {
 		if(copyHash.containsKey(c.getCopyID())==false)
 			copyHash.put(c.getCopyID(), c);
 	}

@@ -10,6 +10,7 @@ import Domain.CopyDataStore;
 import Domain.Patron;
 import Domain.PatronDataStore;
 import Domain.SaleControl;
+import Domain.TitleDataStore;
 import Domain.TransactionLogs;
 
 public class SaleControlTest {
@@ -22,6 +23,22 @@ public class SaleControlTest {
 		sale = new SaleControl();
 	}
 
+	@After
+	public void teardown() throws Exception {
+		TransactionLogs.cleanLogs();
+		Copy c1 = new Copy("C001", TitleDataStore.fetchTitle("T001"));
+		Copy c2 = new Copy("C002", TitleDataStore.fetchTitle("T002"));
+		Copy c3 = new Copy("C003", TitleDataStore.fetchTitle("T001"));
+		Copy c4 = new Copy("C004", TitleDataStore.fetchTitle("T002"));
+		
+		Copy copyNotForSale = new Copy("C399", TitleDataStore.fetchTitle("T399"));
+		CopyDataStore.addCopy(c1);
+		CopyDataStore.addCopy(c2);
+		CopyDataStore.addCopy(c3);
+		CopyDataStore.addCopy(c4);
+		CopyDataStore.addCopy(copyNotForSale);
+	}
+	
 	@Test(expected = Domain.UnknownPatron.class)
 	public void startingCheckOutForUknownPatronResultsInUknownPatronException(){
 		sale.startSale("1098");
@@ -75,11 +92,6 @@ public class SaleControlTest {
 	@Test (expected = SaleControl.CopyNotForSale.class )
 	public void tryingToSaleTitlesNotForSaleRaisesCopyNotForSaleError() {
 		sale.addCopyForSale("C399");
-	}
-	
-	@After
-	public void clearTransactionLog(){
-		TransactionLogs.cleanLogs();
 	}
 	
 }

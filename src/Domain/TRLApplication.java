@@ -10,16 +10,19 @@ public class TRLApplication{
 	public static void main(String[] args){
 		
 		System.out.println("Welcome to TRLApplication.");
-		System.out.println("Below are the list of Patrons and Copies available for your convinience.\n");
-		System.out.println("Patrons availabled:");
-		System.out.println(PatronDataStore.patronIds());
-		System.out.println("\nCopies availabled:");
-		System.out.println(CopyDataStore.copyIds());
-		System.out.println();
+		System.out.println(helpMessage());
 		
+		startSelectAPP(scan);
+		
+		System.out.println("\nPrinting, all transaction logs");
+		System.out.println(TransactionLogs.allLogs());
+	}
+	
+	
+	public static void startSelectAPP(Scanner scan){
 		boolean quit = false;
 		do{
-			displayMenu();
+			System.out.println(menu());
 			String transactionChoice = scan.nextLine();
 			switch (transactionChoice)
 			{
@@ -41,20 +44,24 @@ public class TRLApplication{
 				break;
 			}
 		}while(!quit);
-		
-		System.out.println("\nPrinting, all transaction logs");
-		System.out.println(TransactionLogs.allLogs());
 	}
 	
-	public static void displayAvailablePatrons(){
+	public static String helpMessage(){
+		String message = "Below are the list of Patrons and Copies available for your convinience.\n"
+				+ "Patrons availabled:\n"
+				+ PatronDataStore.patronIds()
+				+"\nCopies availabled:\n"
+				+ CopyDataStore.copyIds() +"\n";
+		return message;
 		
 	}
-	private static void displayMenu(){
-		System.out.println("Choose one of the below options to continue");
-		System.out.println("1 to start check out");
-		System.out.println("2 to start check in");
-		System.out.println("3 to start Sale");
-		System.out.println("0 to close the System\n");
+	public static String menu(){
+		String menuMessage = "Choose one of the below options to continue\n"
+				+ "1 to start check out\n"
+				+ "2 to start check in\n"
+				+ "3 to start Sale\n"
+				+ "0 to close the System\n";
+		return menuMessage;
 		
 	}	
 }

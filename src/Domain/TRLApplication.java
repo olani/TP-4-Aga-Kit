@@ -29,7 +29,7 @@ public class TRLApplication{
 				break;
 			case "2":
 				checkIn = new CheckInApp();
-				checkIn.doCheckIn();
+				checkIn.doCheckIn(scan);
 				break;
 			case "3":
 				saleApp = new SaleApp();

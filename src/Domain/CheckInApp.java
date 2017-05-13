@@ -8,23 +8,33 @@ public class CheckInApp {
 
 	private static CheckInControl checkIn;
 	private static Patron currentPatron;
-	private static Scanner scan = new Scanner(System.in);
+
 	
-	public void doCheckIn() {
+	public void doCheckIn(Scanner scan) {
 		System.out.println("Please enter Patron Id for CheckIn");
 		
 		String pID = scan.nextLine();
 		
 		try {
-			checkIn = new CheckInControl();
-			checkIn.startCheckIn(pID);
-			currentPatron = checkIn.getCurrentPatron();
+			startTransaction(pID);
 			System.out.println("Check In Strarted for Patron Id "+ pID +"\n");
-			enterCopyForCheckIn();
+			enterCopyForCheckIn(scan);
 		} catch (UnknownPatron e) {
 			System.out.println("Patron Id "+ pID + " is Invalid ID\n");
 		}
 		
+		completeCheckOut();		
+	}
+	
+	
+	private void startTransaction(String pID) {
+		checkIn = new CheckInControl();
+		checkIn.startCheckIn(pID);
+		currentPatron = checkIn.getCurrentPatron();
+	}
+	
+	
+	private void completeCheckOut(){
 		if(currentPatron!=null){
 			System.out.println("Check in completed");
 			System.out.println("\n"+checkIn.receipt());
@@ -32,11 +42,10 @@ public class CheckInApp {
 			checkIn = null;
 			currentPatron=null;
 		}
-		
-		
 	}
 	
-	public void enterCopyForCheckIn() {
+	
+	public void enterCopyForCheckIn(Scanner scan) {
 		System.out.println("Enter copyID to check in. Enter 0, to complete check in");
 		String copyId = scan.nextLine();
 		while (!copyId.equals("0")){

@@ -6,23 +6,29 @@ public class SaleApp {
 
 	private static SaleControl sale;
 	private static Patron currentPatron;
-	private static Scanner scan = new Scanner(System.in);
+
 	
-	public  void doSale(){
+	public  void doSale(Scanner scan){
 		System.out.println("Please enter Patron Id for Sale");
 		
 		String pID = scan.nextLine();
 		
 		try {
-			sale = new SaleControl();
-			sale.startSale(pID);
-			currentPatron = sale.getCurrentPatron();
+			startTransaction(pID);
 			System.out.println("Check In Strarted for Patron Id "+ pID +"\n");
-			enterCopyForSale();
+			enterCopyForSale(scan);
 		} catch (Domain.UnknownPatron e) {
 			System.out.println("Patron Id "+ pID + " is Invalid ID\n");
 		}
+		completeSale();
 		
+	}
+	private void startTransaction(String pID) {
+		sale = new SaleControl();
+		sale.startSale(pID);
+		currentPatron = sale.getCurrentPatron();
+	}
+	private void completeSale(){
 		if(currentPatron!=null){
 			System.out.println("Sale completed");
 			System.out.println("\n"+sale.receipt());
@@ -32,7 +38,7 @@ public class SaleApp {
 		}
 	}
 	
-	public void enterCopyForSale() {
+	public void enterCopyForSale(Scanner scan) {
 		System.out.println("Enter copyID to sale. Enter 0, to complete sale");
 		String copyId = scan.nextLine();
 		while (!copyId.equals("0")){

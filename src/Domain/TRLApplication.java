@@ -33,7 +33,7 @@ public class TRLApplication{
 				break;
 			case "3":
 				saleApp = new SaleApp();
-				saleApp.doSale();
+				saleApp.doSale(scan);
 				break;
 			case "0":
 				System.out.println("Exiting");

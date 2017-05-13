@@ -5,9 +5,6 @@ import java.util.Scanner;
 public class CheckOutApp {
 	private static CheckOutControl checkOut;
 	private static Patron currentPatron;
-	//private static Scanner scan = new Scanner(System.in);
-	
-
 
 	public void doCheckOut(Scanner scan) {
 		System.out.println("Please enter Patron Id for CheckOut");

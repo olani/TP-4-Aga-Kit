@@ -25,7 +25,7 @@ public class TRLApplication{
 			{
 			case "1":
 				checkOut = new CheckOutApp();
-				checkOut.doCheckOut();
+				checkOut.doCheckOut(scan);
 				break;
 			case "2":
 				checkIn = new CheckInApp();
